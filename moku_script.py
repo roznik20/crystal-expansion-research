@@ -40,40 +40,21 @@ SWEEP_POINTS      = 512          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
-# Calibration CSV (relative to this script's directory)
-CALIBRATION_CSV   = "calibration datas/ad595_thermocouple_calibration.csv"
-
 # Output file
 OUTPUT_CSV        = "resonance_log.csv"
 
 # ===========================================================================
-# CALIBRATION  –  cubic fit V(T), domain [130 K, 300 K]
+# CALIBRATION  –  cubic fit coefficients from thermocouple_calibration.ipynb
+# V_mV = a3*t^3 + a2*t^2 + a1*t + a0,  t = (T_K - T_MEAN) / T_STD
+# Domain: 133.15 K (−140 °C) – 298.15 K (25 °C)
 # ===========================================================================
 
-def load_calibration(path: str):
-    """
-    Replicates the notebook:
-      - loads CSV
-      - keeps only rows with 130 K <= T <= 300 K
-      - fits a cubic V = poly(T_norm)  where  T_norm = (T - mu) / sigma
-    Returns (cubic_coeffs, T_mean, T_std, T_min_K, T_max_K).
-    """
-    data = np.genfromtxt(path, delimiter=",", skip_header=1)
-    temp_C = data[:, 0]
-    voltage_mV = data[:, 1]
-
-    T_K = temp_C + 273.15
-    mask = (T_K >= 130) & (T_K <= 300)
-    T_K = T_K[mask]
-    voltage_mV = voltage_mV[mask]
-
-    T_mean = T_K.mean()
-    T_std  = T_K.std()          # population std, matches notebook (numpy default)
-    T_norm = (T_K - T_mean) / T_std
-
-    coeffs = np.polyfit(T_norm, voltage_mV, 3)   # [a3, a2, a1, a0]
-
-    return coeffs, T_mean, T_std, T_K.min(), T_K.max()
+CAL_COEFFS  = np.array([-4.467737406588116, 30.398833920002193,
+                         487.48348434479993, -400.91916238202316])
+CAL_T_MEAN  = 230.23333333333335   # K
+CAL_T_STD   = 54.100921639305014   # K
+CAL_T_MIN_K = 133.14999999999998   # K
+CAL_T_MAX_K = 298.15               # K
 
 
 def voltage_to_temperature_C(voltage_V: float,
@@ -158,13 +139,6 @@ def find_resonant_frequency(frequencies: list, gains_db: list) -> float:
 # ===========================================================================
 
 def main() -> None:
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    cal_path   = os.path.join(script_dir, CALIBRATION_CSV)
-
-    print("Loading calibration curve ...")
-    coeffs, T_mean, T_std, T_min_K, T_max_K = load_calibration(cal_path)
-    print(f"  Domain: {T_min_K - 273.15:.1f} °C – {T_max_K - 273.15:.1f} °C\n")
-
     ensure_csv(OUTPUT_CSV)
     run = 1
 
@@ -177,8 +151,8 @@ def main() -> None:
             # ── Step 1: read thermocouple ──────────────────────────────────
             print("  Reading thermocouple voltage ...")
             voltage_V   = read_thermocouple_voltage(MOKU_SERIAL, THERMO_CHANNEL)
-            temperature = voltage_to_temperature_C(voltage_V, coeffs, T_mean, T_std,
-                                                   T_min_K, T_max_K)
+            temperature = voltage_to_temperature_C(voltage_V, CAL_COEFFS, CAL_T_MEAN, CAL_T_STD,
+                                                   CAL_T_MIN_K, CAL_T_MAX_K)
             print(f"  → {voltage_V * 1000:.2f} mV  =  {temperature:.2f} °C")
 
             # ── Step 2: frequency sweep ────────────────────────────────────
