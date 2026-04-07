@@ -33,8 +33,8 @@ CAL_T_MAX_K = 298.15               # K
 
 #===============================
 
-def read_thermo_volt(channel):
-    data = osc.get_data(wait_complete=True)
+def read_thermo_volt(osc_inst,channel):
+    data = osc_inst.get_data(wait_complete=True)
     samples = data[f"ch{channel}"]
     return float(np.mean(samples))
 
@@ -81,15 +81,25 @@ try:
 
     #Data processing
     while True:
+        print(f"Run {run}")
         #recording with oscillsocope
         print("  Reading thermocouple voltage ...")
         voltage_V   = read_thermo_volt(THERMO_CHANNEL)
-        temperature = voltage_to_temperature_C(voltage_V, CAL_COEFFS, CAL_T_MEAN, CAL_T_STD,
-                                                CAL_T_MIN_K, CAL_T_MAX_K)
+        try:
+            temperature = voltage_to_temperature_C(voltage_V, CAL_COEFFS, CAL_T_MEAN, CAL_T_STD,
+                                                    CAL_T_MIN_K, CAL_T_MAX_K)
+        except ValueError as e:
+            print(f"  Warning: {e}")
+            temperature = float('nan')
+            
         print(f"  → {voltage_V * 1000:.2f} mV  =  {temperature:.2f} °C")
         
         #recording with FRA
-        sweep_data = fra.get_data(wait_complete = True)
+        try:
+            sweep_data = fra.get_data(wait_complete = True)
+        except Exception as e:
+            fra.start_sweep()
+            sweep_data = fra.get_data(wait_complete=True)
 
         #logging the data in the csv file
         frequencies = sweep_data["ch1"]["frequency"]

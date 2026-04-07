@@ -130,7 +130,7 @@ def read_thermocouple_voltage(serial: str, channel: int) -> float:
 
 
 def find_resonant_frequency(frequencies: list, gains_db: list) -> float:
-    peak_idx = gains_db.index(max(gains_db))
+    peak_idx = int(np.argmax(gains_db))
     return frequencies[peak_idx]
 
 
