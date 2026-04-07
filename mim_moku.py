@@ -10,14 +10,13 @@ from moku_script import ensure_csv, append_row, voltage_to_temperature_C, find_r
 #-------------------------------
 
 MOKU_SERIAL       = "MokuGo-008036.local"
-THERMO_CHANNEL    = 1
+THERMO_CHANNEL    = 1            #oscilloscope slot
 STREAM_DT         = 10           #datalogger
 SAMPLE_RATE       = 5            #datalogger
 
 SWEEP_START_HZ    = 1_000        # start frequency (Hz)
 SWEEP_END_HZ      = 1_000_000    # stop  frequency (Hz)
 SWEEP_POINTS      = 512          # number of frequency points
-SWEEP_DURATION    = SWEEP_POINTS * 2e-3
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
@@ -91,7 +90,7 @@ try:
         except ValueError as e:
             print(f"  Warning: {e}")
             temperature = float('nan')
-            
+
         print(f"  → {voltage_V * 1000:.2f} mV  =  {temperature:.2f} °C")
         
         #recording with FRA
