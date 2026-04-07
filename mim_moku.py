@@ -20,8 +20,8 @@ SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
-OUTPUT_CSV        = "calibration_run1.csv"
-CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
+OUTPUT_CSV        = "test_moku.csv"
+CSV_FIELDS = ["run", "time", "capacitance_value", "temperature_C"]
 
 #thermo calibration constants
 CAL_COEFFS  = np.array([-4.467737406588116, 30.398833920002193, 487.48348434479993, -400.91916238202316])
@@ -32,13 +32,12 @@ CAL_T_MAX_K = 298.15               # K
 
 a,b = 1.08033962e-02, 3.70341310e-13
 
-#===============================
+#=============================
 
 def read_thermo_volt(osc_inst,channel):
     data = osc_inst.get_data(wait_complete=True)
     samples = data[f"ch{channel}"]
     return float(np.mean(samples))
-
 def cap_calc(f):
     return ( 1 / (2*np.pi*f) ** 2 - b) / a
 
@@ -128,7 +127,6 @@ try:
             "run":                   run,
             "time":                  timestamp,
             "capacitance_value":     cap_val,
-            "thermo_volt":           voltage_V,
             "temperature_C":         round(temperature, 3),
         })
 
