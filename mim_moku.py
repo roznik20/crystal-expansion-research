@@ -14,9 +14,9 @@ THERMO_CHANNEL    = 1            #oscilloscope slot
 STREAM_DT         = 10           #datalogger
 SAMPLE_RATE       = 5            #datalogger
 
-SWEEP_START_HZ    = 1_000        # start frequency (Hz)
-SWEEP_END_HZ      = 1_000_000    # stop  frequency (Hz)
-SWEEP_POINTS      = 512          # number of frequency points
+SWEEP_START_HZ    = 10_000        # start frequency (Hz)
+SWEEP_END_HZ      = 500_000    # stop  frequency (Hz)
+SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
@@ -71,19 +71,23 @@ try:
         start_frequency=SWEEP_START_HZ,
         stop_frequency=SWEEP_END_HZ,
         num_points=SWEEP_POINTS,
-        averaging_time=2e-3
+        averaging_time=2e-3,
+        strict=False,
     )
+    sweep_cfg = fra.get_sweep()
+    print("Sweep config applied by Moku:")
+    for k, v in sweep_cfg.items():
+        print(f"  {k}: {v}")
+    print()
+    
     fra.set_output(1, amplitude=SWEEP_AMPLITUDE)
-
-    #Start collecting data
-    fra.start_sweep()
 
     #Data processing
     while True:
         print(f"Run {run}")
         #recording with oscillsocope
         print("  Reading thermocouple voltage ...")
-        voltage_V   = read_thermo_volt(THERMO_CHANNEL)
+        voltage_V   = read_thermo_volt(osc, THERMO_CHANNEL)
         try:
             temperature = voltage_to_temperature_C(voltage_V, CAL_COEFFS, CAL_T_MEAN, CAL_T_STD,
                                                     CAL_T_MIN_K, CAL_T_MAX_K)
@@ -94,15 +98,21 @@ try:
         print(f"  → {voltage_V * 1000:.2f} mV  =  {temperature:.2f} °C")
         
         #recording with FRA
-        try:
-            sweep_data = fra.get_data(wait_complete = True)
-        except Exception as e:
-            fra.start_sweep()
-            sweep_data = fra.get_data(wait_complete=True)
+        fra.start_sweep(single=True)
+        sweep_data = fra.get_data(wait_complete=True)
 
         #logging the data in the csv file
         frequencies = sweep_data["ch1"]["frequency"]
         gains_db    = sweep_data["ch1"]["magnitude"]
+
+        # DEBUG: print gain curve summary to diagnose stale/flat data
+        g = np.asarray(gains_db, dtype=float)
+        f = np.asarray(frequencies, dtype=float)
+        valid = ~np.isnan(g)
+        print(f"  [DEBUG] {valid.sum()}/{len(g)} valid points, "
+              f"gain range: {np.nanmin(g):.1f} to {np.nanmax(g):.1f} dB, "
+              f"max at {f[np.nanargmax(g)]:.0f} Hz")
+
         resonant_hz = find_resonant_frequency(frequencies, gains_db)
         timestamp   = datetime.datetime.now().isoformat(timespec="seconds")
 
@@ -123,7 +133,7 @@ except KeyboardInterrupt:
 
 except Exception as e:
     print(f"\nAn error occurred: {e}")
-    raise e
+    raise
 
 finally:
     mim.set_power_supply(1, enable=False)

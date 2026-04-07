@@ -129,9 +129,35 @@ def read_thermocouple_voltage(serial: str, channel: int) -> float:
         osc.relinquish_ownership()
 
 
-def find_resonant_frequency(frequencies: list, gains_db: list) -> float:
-    peak_idx = int(np.argmax(gains_db))
-    return frequencies[peak_idx]
+def find_resonant_frequency(frequencies: list, gains_db: list,
+                            smooth_window: int = 15) -> float:
+    freqs = np.asarray(frequencies, dtype=float)
+    gains = np.asarray(gains_db, dtype=float)
+
+    # ── Step 1: smooth with a moving-average to suppress noise ──
+    # Pad edges with the boundary values so convolution doesn't create
+    # fake peaks from zero-padding (gains are negative dB).
+    pad = smooth_window // 2
+    padded = np.pad(gains, pad, mode='edge')
+    kernel = np.ones(smooth_window) / smooth_window
+    smoothed = np.convolve(padded, kernel, mode='valid')
+
+    # ── Step 2: find peak of smoothed curve ──
+    peak_idx = int(np.nanargmax(smoothed))
+
+    # ── Step 3: parabolic interpolation on the original data ──
+    # Fit a parabola to the 3 points around the peak for sub-bin accuracy.
+    # Uses log-frequency because the sweep is log-spaced.
+    if 1 <= peak_idx <= len(freqs) - 2:
+        log_f = np.log(freqs[peak_idx - 1 : peak_idx + 2])
+        g     = gains[peak_idx - 1 : peak_idx + 2]
+        # vertex of parabola through 3 points: offset = 0.5*(g[0]-g[2])/(g[0]-2*g[1]+g[2])
+        denom = g[0] - 2 * g[1] + g[2]
+        if denom != 0:
+            offset = 0.5 * (g[0] - g[2]) / denom
+            return float(np.exp(log_f[1] + offset * (log_f[2] - log_f[1])))
+
+    return float(freqs[peak_idx])
 
 
 # ===========================================================================
