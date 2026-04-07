@@ -18,7 +18,7 @@ SWEEP_START_HZ    = 10_000        # start frequency (Hz)
 SWEEP_END_HZ      = 500_000    # stop  frequency (Hz)
 SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
-OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
+       # Moku output channel for the stimulus
 
 OUTPUT_CSV        = "test_moku.csv"
 CSV_FIELDS = ["run", "time", "capacitance_value", "temperature_C"]
