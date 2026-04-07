@@ -96,7 +96,7 @@ def voltage_to_temperature_C(voltage_V: float,
 # CSV helpers
 # ===========================================================================
 
-CSV_FIELDS = ["run", "time", "capacitance_value", "temperature_C"]
+CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
 
 
 def ensure_csv(path: str) -> None:

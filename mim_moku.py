@@ -20,8 +20,8 @@ SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
-OUTPUT_CSV        = "resonance_log.csv"
-CSV_FIELDS = ["run", "time", "capacitance_value", "temperature_C"]
+OUTPUT_CSV        = "calibration_run1.csv"
+CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
 
 #thermo calibration constants
 CAL_COEFFS  = np.array([-4.467737406588116, 30.398833920002193, 487.48348434479993, -400.91916238202316])
@@ -128,6 +128,7 @@ try:
             "run":                   run,
             "time":                  timestamp,
             "capacitance_value":     cap_val,
+            "thermo_volt":           voltage_V,
             "temperature_C":         round(temperature, 3),
         })
 
