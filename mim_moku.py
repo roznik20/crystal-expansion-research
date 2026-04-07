@@ -21,7 +21,7 @@ SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
 OUTPUT_CSV        = "resonance_log.csv"
-CSV_FIELDS = ["run", "time", "resonant_frequency_hz", "temperature_C"]
+CSV_FIELDS = ["run", "time", "capacitance_value", "temperature_C"]
 
 #thermo calibration constants
 CAL_COEFFS  = np.array([-4.467737406588116, 30.398833920002193, 487.48348434479993, -400.91916238202316])
@@ -30,12 +30,17 @@ CAL_T_STD   = 54.100921639305014   # K
 CAL_T_MIN_K = 133.14999999999998   # K
 CAL_T_MAX_K = 298.15               # K
 
+a,b = 1.08033962e-02, 3.70341310e-13
+
 #===============================
 
 def read_thermo_volt(osc_inst,channel):
     data = osc_inst.get_data(wait_complete=True)
     samples = data[f"ch{channel}"]
     return float(np.mean(samples))
+
+def cap_calc(f):
+    return ( 1 / (2*np.pi*f) ** 2 - b) / a
 
 
 mim = MultiInstrument(MOKU_SERIAL, platform_id=2, force_connect=True)
@@ -86,7 +91,7 @@ try:
     while True:
         print(f"Run {run}")
         #recording with oscillsocope
-        print("  Reading thermocouple voltage ...")
+        #print("  Reading thermocouple voltage ...")
         voltage_V   = read_thermo_volt(osc, THERMO_CHANNEL)
         try:
             temperature = voltage_to_temperature_C(voltage_V, CAL_COEFFS, CAL_T_MEAN, CAL_T_STD,
@@ -95,7 +100,7 @@ try:
             print(f"  Warning: {e}")
             temperature = float('nan')
 
-        print(f"  → {voltage_V * 1000:.2f} mV  =  {temperature:.2f} °C")
+        #print(f"  → {voltage_V * 1000:.2f} mV  =  {temperature:.2f} °C")
         
         #recording with FRA
         fra.start_sweep(single=True)
@@ -109,19 +114,20 @@ try:
         g = np.asarray(gains_db, dtype=float)
         f = np.asarray(frequencies, dtype=float)
         valid = ~np.isnan(g)
-        print(f"  [DEBUG] {valid.sum()}/{len(g)} valid points, "
+        """print(f"  [DEBUG] {valid.sum()}/{len(g)} valid points, "
               f"gain range: {np.nanmin(g):.1f} to {np.nanmax(g):.1f} dB, "
-              f"max at {f[np.nanargmax(g)]:.0f} Hz")
+              f"max at {f[np.nanargmax(g)]:.0f} Hz")"""
 
         resonant_hz = find_resonant_frequency(frequencies, gains_db)
         timestamp   = datetime.datetime.now().isoformat(timespec="seconds")
 
-        print(f"  → resonant frequency: {resonant_hz:.1f} Hz\n")
+        #print(f"  → resonant frequency: {resonant_hz:.1f} Hz\n") 
+        cap_val = cap_calc(resonant_hz)
 
         append_row(OUTPUT_CSV, {
             "run":                   run,
             "time":                  timestamp,
-            "resonant_frequency_hz": resonant_hz,
+            "capacitance_value":     cap_val,
             "temperature_C":         round(temperature, 3),
         })
 
