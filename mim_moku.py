@@ -1,5 +1,7 @@
 import numpy as np
 import datetime
+import json
+import csv
 from moku.instruments import MultiInstrument, Oscilloscope, FrequencyResponseAnalyzer
 from moku_script import ensure_csv, append_row, voltage_to_temperature_C, find_resonant_frequency
 
@@ -8,6 +10,7 @@ from moku_script import ensure_csv, append_row, voltage_to_temperature_C, find_r
 #HARD-CODED SECTION
 
 #-------------------------------
+print("the beginning")
 
 MOKU_SERIAL       = "MokuGo-008036.local"
 THERMO_CHANNEL    = 1            #oscilloscope slot
@@ -18,26 +21,30 @@ SWEEP_START_HZ    = 10_000        # start frequency (Hz)
 SWEEP_END_HZ      = 500_000    # stop  frequency (Hz)
 SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
-       # Moku output channel for the stimulus
+OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
-OUTPUT_CSV        = "test_moku.csv"
-CSV_FIELDS = ["run", "time", "capacitance_value", "temperature_C"]
+OUTPUT_CSV        = "fuckmedaddy.csv"
+CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
+RAW_SWEEP_CSV     = "raw_sweeps.csv"
 
 #thermo calibration constants
-CAL_COEFFS  = np.array([-4.467737406588116, 30.398833920002193, 487.48348434479993, -400.91916238202316])
-CAL_T_MEAN  = 230.23333333333335   # K
-CAL_T_STD   = 54.100921639305014   # K
-CAL_T_MIN_K = 133.14999999999998   # K
-CAL_T_MAX_K = 298.15               # K
+
+CAL_COEFFS  = np.array([-5.371838e+01, 1.037465e+02,
+                         1961.945128, 1227.4515])
+CAL_T_MEAN  = 398.27    # K
+CAL_T_STD   = 193.13    # K
+CAL_T_MIN_K = 73.15     # K  (-200 °C)
+CAL_T_MAX_K = 573.15    # K  (300 °C)
 
 a,b = 1.08033962e-02, 3.70341310e-13
 
-#=============================
+#===============================
 
 def read_thermo_volt(osc_inst,channel):
     data = osc_inst.get_data(wait_complete=True)
     samples = data[f"ch{channel}"]
     return float(np.mean(samples))
+
 def cap_calc(f):
     return ( 1 / (2*np.pi*f) ** 2 - b) / a
 
@@ -123,10 +130,31 @@ try:
         #print(f"  → resonant frequency: {resonant_hz:.1f} Hz\n") 
         cap_val = cap_calc(resonant_hz)
 
+        # Save raw sweep for live viewing in sweep_viewer.ipynb
+        with open('latest_sweep.json', 'w') as jf:
+            json.dump({
+                'run': run,
+                'frequency': f.tolist(),
+                'gain_db': g.tolist(),
+                'resonant_hz': resonant_hz,
+                'temperature_C': round(temperature, 3),
+                'capacitance_pF': cap_val * 1e12,
+            }, jf)
+
+        # Append raw sweep data to CSV (one row per frequency point)
+        write_header = not __import__('os').path.exists(RAW_SWEEP_CSV)
+        with open(RAW_SWEEP_CSV, 'a', newline='') as rf:
+            writer = csv.writer(rf)
+            if write_header:
+                writer.writerow(['run', 'frequency_hz', 'gain_db'])
+            for fi, gi in zip(f, g):
+                writer.writerow([run, fi, gi])
+
         append_row(OUTPUT_CSV, {
             "run":                   run,
             "time":                  timestamp,
             "capacitance_value":     cap_val,
+            "thermo_volt":           voltage_V,
             "temperature_C":         round(temperature, 3),
         })
 
