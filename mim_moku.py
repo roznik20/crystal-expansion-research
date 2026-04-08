@@ -17,15 +17,15 @@ THERMO_CHANNEL    = 1            #oscilloscope slot
 STREAM_DT         = 10           #datalogger
 SAMPLE_RATE       = 5            #datalogger
 
-SWEEP_START_HZ    = 10_000        # start frequency (Hz)
-SWEEP_END_HZ      = 500_000    # stop  frequency (Hz)
+SWEEP_START_HZ    = 30000        # start frequency (Hz)
+SWEEP_END_HZ      = 300000    # stop  frequency (Hz)
 SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
-OUTPUT_CSV        = "fuckmedaddy.csv"
+OUTPUT_CSV        = "final_data/no_sample_capacitances.csv"
 CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
-RAW_SWEEP_CSV     = "raw_sweeps.csv"
+RAW_SWEEP_CSV     = "final_data/no_raw_sample_data.csv"
 
 #thermo calibration constants
 
