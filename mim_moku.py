@@ -23,7 +23,7 @@ SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
-OUTPUT_CSV        = "fuckmedaddy.csv"
+OUTPUT_CSV        = "noise3.csv"
 CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
 RAW_SWEEP_CSV     = "raw_sweeps.csv"
 
