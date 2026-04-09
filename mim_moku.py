@@ -23,9 +23,9 @@ SWEEP_POINTS      = 1024          # number of frequency points
 SWEEP_AMPLITUDE   = 0.5          # stimulus amplitude (Vpp)
 OUTPUT_CHANNEL    = 1            # Moku output channel for the stimulus
 
-OUTPUT_CSV        = "final_data/test.csv"
+OUTPUT_CSV        = "final_data_cut/heating_sample_cut.csv"
 CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
-RAW_SWEEP_CSV     = "final_data/test_raw.csv"
+RAW_SWEEP_CSV     = "final_data/heating_sample_cut_raw.csv"
 
 #thermo calibration constants
 
