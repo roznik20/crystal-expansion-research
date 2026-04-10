@@ -1,31 +1,9 @@
-"""
-Crystal Expansion Frequency Sweep Logger
-=========================================
-For each run:
-  1. Deploys Oscilloscope on the Moku Go to read the AD595 thermocouple voltage.
-  2. Converts that voltage to temperature (°C) using the cubic calibration curve
-     from thermocouple_calibration.ipynb (domain: 130 K – 300 K).
-  3. Deploys FrequencyResponseAnalyzer to run a frequency sweep.
-  4. Finds the resonant frequency as the frequency with maximum gain.
-  5. Appends one row to the CSV: run, time, resonant_frequency_hz, temperature_C.
-
-CSV schema
-----------
-run                  : integer, increments each loop iteration
-time                 : ISO-8601 wall-clock timestamp
-resonant_frequency_hz: frequency (Hz) at which gain is maximum
-temperature_C        : temperature in °C from thermocouple calibration
-"""
-
 import csv
-import datetime
 import os
 import numpy as np
 
-from moku.instruments import FrequencyResponseAnalyzer, Oscilloscope
-
 # ===========================================================================
-# USER CONFIGURATION
+# HARD CODED PART
 # ===========================================================================
 
 MOKU_SERIAL       = "MokuGo-008036.local"
@@ -56,6 +34,13 @@ CAL_T_STD   = 193.13    # K
 CAL_T_MIN_K = 73.15     # K  (-200 °C)
 CAL_T_MAX_K = 573.15    # K  (300 °C)
 
+CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
+
+a,b = 1.08033962e-02, 3.70341310e-13
+
+#=============================================================================
+#DEFINING HELPER FUNCTIONS FOR mim_moku.py
+#=============================================================================
 
 def voltage_to_temperature_C(voltage_V: float,
                               coeffs, T_mean, T_std,
@@ -92,13 +77,6 @@ def voltage_to_temperature_C(voltage_V: float,
     return T_K - 273.15
 
 
-# ===========================================================================
-# CSV helpers
-# ===========================================================================
-
-CSV_FIELDS = ["run", "time", "capacitance_value", "thermo_volt", "temperature_C"]
-
-
 def ensure_csv(path: str) -> None:
     if not os.path.exists(path):
         with open(path, "w", newline="") as f:
@@ -108,25 +86,6 @@ def ensure_csv(path: str) -> None:
 def append_row(path: str, row: dict) -> None:
     with open(path, "a", newline="") as f:
         csv.DictWriter(f, fieldnames=CSV_FIELDS).writerow(row)
-
-
-# ===========================================================================
-# Moku helpers
-# ===========================================================================
-
-def read_thermocouple_voltage(serial: str, channel: int) -> float:
-    """
-    Briefly deploys the Oscilloscope, reads one data frame from the given
-    channel, averages all samples (DC measurement), and returns the mean
-    voltage in Volts.
-    """
-    osc = Oscilloscope(serial, force_connect=True)
-    try:
-        data = osc.get_data(wait_complete=True)
-        samples = data[f"ch{channel}"]
-        return float(np.mean(samples))
-    finally:
-        osc.relinquish_ownership()
 
 
 def find_resonant_frequency(frequencies: list, gains_db: list,
@@ -159,63 +118,10 @@ def find_resonant_frequency(frequencies: list, gains_db: list,
 
     return float(freqs[peak_idx])
 
+def read_thermo_volt(osc_inst,channel):
+    data = osc_inst.get_data(wait_complete=True)
+    samples = data[f"ch{channel}"]
+    return float(np.mean(samples))
 
-# ===========================================================================
-# MAIN
-# ===========================================================================
-
-def main() -> None:
-    ensure_csv(OUTPUT_CSV)
-    run = 1
-
-    print(f"Logging to '{OUTPUT_CSV}'. Press Ctrl+C to stop.\n")
-
-    try:
-        while True:
-            print(f"Run {run}")
-
-            # ── Step 1: read thermocouple ──────────────────────────────────
-            print("  Reading thermocouple voltage ...")
-            voltage_V   = read_thermocouple_voltage(MOKU_SERIAL, THERMO_CHANNEL)
-            temperature = voltage_to_temperature_C(voltage_V, CAL_COEFFS, CAL_T_MEAN, CAL_T_STD,
-                                                   CAL_T_MIN_K, CAL_T_MAX_K)
-            print(f"  → {voltage_V * 1000:.2f} mV  =  {temperature:.2f} °C")
-
-            # ── Step 2: frequency sweep ────────────────────────────────────
-            print(f"  Sweeping {SWEEP_START_HZ} Hz → {SWEEP_END_HZ} Hz ...")
-            fra = FrequencyResponseAnalyzer(MOKU_SERIAL, force_connect=True)
-            try:
-                fra.set_sweep(
-                    start_frequency=SWEEP_START_HZ,
-                    stop_frequency=SWEEP_END_HZ,
-                    num_points=SWEEP_POINTS,
-                    strict=False,
-                )
-                fra.set_output(OUTPUT_CHANNEL, amplitude=SWEEP_AMPLITUDE)
-                fra.start_sweep(single=True)
-                sweep_data  = fra.get_data(wait_complete=True)
-            finally:
-                fra.relinquish_ownership()
-
-            frequencies = sweep_data["ch1"]["frequency"]
-            gains_db    = sweep_data["ch1"]["magnitude"]
-            resonant_hz = find_resonant_frequency(frequencies, gains_db)
-            timestamp   = datetime.datetime.now().isoformat(timespec="seconds")
-
-            print(f"  → resonant frequency: {resonant_hz:.1f} Hz\n")
-
-            append_row(OUTPUT_CSV, {
-                "run":                   run,
-                "time":                  timestamp,
-                "resonant_frequency_hz": resonant_hz,
-                "temperature_C":         round(temperature, 3),
-            })
-
-            run += 1
-
-    except KeyboardInterrupt:
-        print("\nStopped by user.")
-
-
-if __name__ == "__main__":
-    main()
+def cap_calc(f):
+    return ( 1 / (2*np.pi*f) ** 2 - b) / a

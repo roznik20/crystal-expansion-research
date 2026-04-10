@@ -3,7 +3,7 @@ import datetime
 import json
 import csv
 from moku.instruments import MultiInstrument, Oscilloscope, FrequencyResponseAnalyzer
-from moku_script import ensure_csv, append_row, voltage_to_temperature_C, find_resonant_frequency
+from moku_helper import ensure_csv, append_row, voltage_to_temperature_C, find_resonant_frequency, read_thermo_volt, cap_calc
 
 #===============================
 
@@ -39,15 +39,6 @@ CAL_T_MAX_K = 573.15    # K  (300 °C)
 a,b = 1.08033962e-02, 3.70341310e-13
 
 #===============================
-
-def read_thermo_volt(osc_inst,channel):
-    data = osc_inst.get_data(wait_complete=True)
-    samples = data[f"ch{channel}"]
-    return float(np.mean(samples))
-
-def cap_calc(f):
-    return ( 1 / (2*np.pi*f) ** 2 - b) / a
-
 
 mim = MultiInstrument(MOKU_SERIAL, platform_id=2, force_connect=True)
 
