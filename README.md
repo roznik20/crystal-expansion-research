@@ -5,4 +5,4 @@ You may find the specific code that programmed the Moku:Go used for data collect
 Please feel free to also look at the calibration and data analysis codes that were used to write our final report.
 
 Cheers,
-malabart
+malabart and the team
