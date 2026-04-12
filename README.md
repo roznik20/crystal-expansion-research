@@ -1,8 +1,30 @@
-# crystal-expansion-research
-This is the repository for all data collection and analysis code written for our research on thermal expansion of thiourea in the context of PHYS 258 course at McGill University.
+# Investigation of the thermal expansion coefficient of Thiourea  
 
-You may find the specific code that programmed the Moku:Go used for data collection under mim_moku.py (as well as helper functions under moku_helper.py).
-Please feel free to also look at the calibration and data analysis codes that were used to write our final report.
+This repository contains the data, analysis code, figures, and report for a McGill PHYS 258 Experimental Methods II final project on measuring the thermal expansion coefficient of thiourea using temperature-dependent capacitance changes.
 
-Cheers,
-malabart and the team
+## Overview
+
+The goal of this project was to estimate the thermal expansion coefficient of thiourea by monitoring how the capacitance of a custom parallel-plate capacitor changed with temperature. The capacitor was incorporated into a series RLC circuit, and the capacitance was inferred from resonance measurements.
+
+A thiourea sample was attached to one capacitor plate so that thermal dilation produced a small change in plate separation, leading to a measurable change in capacitance. Resonant frequency measurements were performed using Moku hardware and related analysis tools, and the resulting data was processed in Python.
+
+## Repository Structure
+
+```text
+.
+├── data/ # All collected data: thermocouple, resonance, calibration, and all usable runs
+├── notebooks/            # Jupyter notebooks for analysis and exploration
+├── scripts/              # Instrument / acquisition / helper scripts
+├── results/
+│   └── output_plots/     # Visual outputs
+├── report/               # Final LaTeX source, bibliography, template, PDFs, logbook
+├── LICENSE
+└── README.md
+
+## Note on the use of AI assistance
+
+Portions of the code were written with AI assistance for scaffolding and refactoring. AI assistance was also called upon to accelerate the processes of debugging, documentation consultation and brainstorming. All AI outputs were reviewed, tested, and adapted as needed by us. 
+
+## Authors 
+Bogdan-Vladimir Damian, Ethan Hall, Christopher Li, Martin Labartette and Nikita Rozanov
+
