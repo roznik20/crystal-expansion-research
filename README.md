@@ -21,6 +21,11 @@ A thiourea sample was attached to one capacitor plate so that thermal dilation p
 ├── LICENSE
 └── README.md
 
+## Encountered difficulties
+
+In the process of the construction of the custom capacitors, there were many obstacles along the way. 
+Perhaps the one that most signficantly impacted the data collection and validity of the results was when the epoxy glue set, it displaced the entire plate setup in a way that the plates were no longer parallel and the capacitor area had significantly changed. Given that we didn't have access to another sample, we had to saw off the capacitor PLA setup and reglue it. In the process, the thiourea sample broke in half and parts were lost. What we did is simply apply glue in between the pieces and reassemble the setup. We had to carry on with the experiment. 
+
 ## Note on the use of AI assistance
 
 Portions of the code were written with AI assistance for scaffolding and refactoring. AI assistance was also called upon to accelerate the processes of debugging, documentation consultation and brainstorming. All AI outputs were reviewed, tested, and adapted as needed by us. 
