@@ -1,0 +1,451 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage{journal-template}
+
+
+%------- page header/footer formatting -----------
+%          Do not change
+\usepackage{fancyhdr, subcaption}
+\usepackage{booktabs, gensymb}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+
+
+%------- Title page   -----------
+%        Modify as needed
+\title{Using Temperature-Induced Changes in Capacitance as a Probe in determining the Thermal Expansion Coefficient of Thiourea }
+\author[1]{Bogdan-Vladimir Damian}
+\author[1]{Ethan Hall}
+\author[1]{Martin Labartette}
+\author[1]{Christopher Li}
+\author[1]{Nikita Rozanov}
+\affil[1]{McGill University, Department of Physics, 3600 University Street, H3A 2T8 Montréal Québec, Canada}
+
+\date{April 12th, 2026}                     %% if you don't need date to appear
+\setcounter{Maxaffil}{0}
+\renewcommand\Affilfont{\itshape\small}
+
+
+
+
+\begin{document}
+\maketitle %Automatically generated the title page
+
+
+%------- Abstract -----------
+%        Modify as needed
+\begin{abstract}
+
+\noindent
+This experiment determined the thermal expansion coefficient of thiourea by measuring temperature-induced changes in capacitance. A thiourea sample was mounted on a parallel-plate capacitor such that thermal expansion altered the plate separation. The capacitance was inferred from the resonant frequency of a series RLC circuit, with only the capacitor section subjected to temperature variation. From the temperature-dependent resonance data, a displacement–temperature relationship was obtained, yielding a linear thermal expansion coefficient of \(\alpha = (13.6 \pm 5.6) \times 10^{-5}\,\mathrm{K^{-1}}\). This was compared to the accepted value of \(6.41 \times 10^{-5}\,\mathrm{K^{-1}}\), resulting in a \(112.6\% \;\text{percentage error and a } 1.28\sigma \;\) deviation, attributed mainly to uncertainties related to the experimental setup.
+
+\end{abstract}
+
+
+
+
+%-------------------------------------------------------------
+\section{Introduction}
+Thiourea is a compound that is used in industries like metal refining, photographic processing, and crystallization engineering. In the context of crystal growth and low-temperature solid-state physics, a property of interest is its thermal expansion coefficient which quantifies how its dimensions change with temperature. Understanding this coefficient is crucial for designing experiments that involve phase transitions, lattice dynamics, and structural stability at varying temperatures. 
+
+\subsection{RLC Resonance and Capacitance Theory}  
+
+For a parallel-plate capacitor, the capacitance is given by:  
+\begin{equation}
+    C = \frac{\varepsilon_0 \varepsilon_r A}{d},
+    \label{eq1}
+\end{equation}  
+where \(\varepsilon_0\) is the permittivity of free space (\(8.854 \times 10^{-12}\, \text{F/m}\)), \(\varepsilon_r\) is the relative permittivity of the dielectric material between the plates, \(A\) is the overlapping area of the plates, and \(d\) is the separation distance between them. Small changes in either \(d\) or the dielectric properties produce measurable changes in \(C\), forming the basis of capacitance-based sensing techniques.  
+
+When the capacitor is incorporated into an RLC circuit in series, the current through the circuit peaks at a resonant frequency determined by the capacitance and the circuit's inductance \(L\). The angular resonant frequency is given by:  
+\begin{equation}
+    \omega_0 = \frac{1}{\sqrt{LC}},
+    \label{eq2}
+\end{equation}  
+where \(L\) is the inductance in Henri, \(C\) is the capacitance in farads, and \(\omega_0\) is in radians per second. In terms of frequency \(f_0\) in Hertz, the relationship becomes:  
+\begin{equation}
+    f_0 = \frac{\omega_0}{2\pi} = \frac{1}{2\pi \sqrt{LC}}.
+\end{equation}  
+
+Given a known inductance, the capacitance can be calculated for given resonant frequencies.
+
+\subsection{Thermal Expansion Theory}  
+
+All solids exhibit thermal expansion, quantified by the thermal expansion coefficient, which measures how a material’s dimensions change with temperature. The volumetric change is
+\begin{equation}
+    d V = \alpha_V V_0 d T,
+\end{equation}
+where \(\Delta V\) is the volume change, \(\alpha_V\) is the volumetric coefficient of thermal expansion, \(V_0\) is the initial volume, and \(\Delta T\) is the temperature change.  
+
+For most practical applications, particularly in crystal growth experiments, the linear expansion along a single dimension is of primary interest:  
+\begin{equation}
+    \Delta L = \alpha L_0 \Delta T,
+    \label{eq5}
+\end{equation}
+where \(L_0\) is the initial length, and \(\alpha\) is the linear thermal expansion coefficient. 
+
+In a parallel-plate capacitor setup, a temperature-induced change in sample length alters the plate separation, producing a change in capacitance. By relating the change in capacitance with respect to the change in temperature, the thermal expansion coefficient of a sample material is
+
+
+\begin{equation}
+    \alpha =\frac{D_0}{L_0C_0}\left (\frac{dC'}{dT}-\frac{dC}{dT}\right),
+    \label{eq7}
+\end{equation}
+
+where $D_0$ is the initial distance between the capacitor plates, $C_0$ is the initial capacitance, $C$ is the capacitance of the capacitor, and $C'$ is the capacitance of the capacitor with a sample attached. The full derivation for this formula can be found in Appendix \ref{derivation}.
+
+
+
+By altering the temperature of the capacitor plates and measuring the resonant frequency, in particular lowering the temperature with liquid nitrogen, the change in the capacitance can be graphed against the change in temperature for a capacitor with the thiourea and one without. Subsequently, the thermal expansion coefficient can be found by taking the taking the slope of the linear lines that fit through the graphs of the two samples and measurements of the initial values. Then, uncertainties in those quantities were propagated in quadrature as a function of several variables, along with other statistical analysis tools from \cite{textbook1} to model and interpret data. 
+
+%-------------------------------------------------------------
+\section{Methods}
+
+\subsection{Apparatus}
+
+\subsubsection{Custom Capacitors}
+
+Because this experiment required attaching a sample to the capacitor, a custom setup was designed to accommodate the thiourea. Two configurations were prepared.
+
+First, a baseline capacitor was constructed without the thiourea. Two square aluminum plates, each $1$ mm thick and $5$ cm in length, cut with a tolerance of $\pm 0.1$ mm, were epoxied onto separate 3D-printed $3 \,\text{cm} \times 3 \,\text{cm} \times 2 \,\text{cm}$ PLA blocks. Epoxy was selected because, once cured, it is stable under low-temperatures. To ensure a measurable capacitance, the plate separation needed to be minimized. A paper sheet was temporarily inserted between the plates to maintain a spacing of $0.05$ mm while the blocks were glued to a 3D-printed base measuring $4 \,\text{cm} \times 4 \,\text{cm} \times 1 \,\text{cm}$. The paper was then removed to prevent it from adhering permanently. A second capacitor was constructed identically, but the thiourea was glued onto one of the plates before assembly onto the block. The initial sample length was measured using a caliper, yielding $L_0 = 1.8\pm0.1\ mm$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.20\textwidth, trim=0 15cm 0 0, clip]{figures/illustrations/_customcapacitor1.jpg}
+    \hspace{0.5cm}
+     \includegraphics[width=0.20\textwidth, trim=0 15cm 0 0, clip]{figures/illustrations/_customcapacitor2.jpg}
+    \caption{Left: capacitor without the thiourea. Right: capacitor with the thiourea on the right plate.}
+\end{figure}
+
+\subsubsection{General Setup}
+
+A breadboard was assembled using a $1.1$ k$\Omega$ resistor and a custom $10.46$ mH inductor. The inductor was made by winding copper wire around a magnetic ring, allowing the inductance to be adjusted by varying the number of coils. The capacitor was connected to the breadboard by attaching wires to both plates via Kapton tape, chosen for its electrical conductivity and resistance to extreme temperature changes. Moku:Go supplied a $5$V input and measured the output voltage across the capacitor. A thermocouple probe was attached to one of the plates to monitor temperature.  The Moku:Go was programmed to power the thermocouple probe and read its output voltage using the oscilloscope instrument, and simultaneously make frequency sweeps for each temperature point in order to get the necessary data for the wanted plots. See mim\_moku.py in GitHub \cite{github_link}.
+
+The capacitor assembly was suspended above a Dewar using clamps and a retort stand. Liquid nitrogen was poured into the Dewar so that its vapor cooled the capacitor. The cooling rate was controlled by adjusting the height of the clamps: lowering the setup increased exposure to the nitrogen vapor and accelerated cooling, while raising it allowed the temperature to increase.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.2\textwidth, trim=0 10cm 0 0, clip]{figures/illustrations/_breadboard.jpg}
+    \hspace{0.8cm}   \includegraphics[width=0.2\textwidth, trim=0 10cm 0 0, clip]{figures/illustrations/_customsetup.jpg}
+    \caption{Left: Breadboard setup with custom inductor. Right: experiment setup with capacitor lowered into Dewar and AD 594 thermocouple chip setup in the back.}
+\end{figure}
+
+\subsection{Procedure}
+
+\subsubsection{Calibrating the Thermocouple Probe}
+
+The thermocouple outputs a voltage signal, and these measurements required conversion to the corresponding temperature. Published calibration data provided discrete voltage-to-temperature mappings for the specific thermocouple type used \cite{ad594}. For continuous temperature measurements across the experimental range, discrete calibration points were fitted to candidate functions. The function that yielded the best fit was used to convert all voltages into accurate temperature readings.  
+
+\subsubsection{Calibrating the Setup}
+
+Before experimenting, the setup was calibrated to account for parasitic capacitance, mainly from the Moku:Go, which could introduce systematic errors. A frequency sweep was performed on the RLC circuit via the Moku:Go's Frequency Analyzer, using capacitors of known values in a standard environment, verified using an LCR meter. The resonance frequency of each sweep allowed for calculation of the system’s capacitance using Equation \ref{eq2}. The measured resonance was plotted as 
+\begin{equation}
+    \frac{1}{\omega_0^2} = LC_{actual} + LC_{parasitic},
+\end{equation}
+where finding $C_{parasitic}$ can be found simply by looking at the y-intercept of the fit. The experimentally obtained capacitance values were then modified with this parasitic capacitance in mind.
+
+In addition, a set of three runs were done with the capacitor setup without the sample at room temperature to estimate the noise in capacitance measurements of the apparatus. Each run comprised of 30 measurements which were experimentally determined to be sufficient such that the results were Gaussian distributed and showed no significant structures due to lack of data points.
+
+\subsubsection{Finding the Thermal Expansion Coefficient}
+
+The capacitor plates themselves also undergo thermal expansion, which influences the measured capacitance. Although the linear expansion of thin plates is small, the resulting change in the effective plate area can still introduce a systematic error. To account for this effect, two sets of experiments were conducted. First, a baseline run was performed using the empty capacitor without the sample. A second run was then carried out with the sample mounted in the capacitor assembly. To begin each trial, the capacitor assembly was lowered into the Dewar flask and positioned above the liquid nitrogen surface. The system was allowed to cool to approximately \(-40^\circ\text{C}\)  before being raised away from liquid nitrogen and left to gradually warm back to room temperature.
+
+For each capacitor setup, a graph of the capacitance versus the temperature was plotted, and a linear fitting was performed. The justification of this fit will be done via residuals analysis. While the full plot is will not be linear, the result needed is the instantaneous rate of change of the capacitance with respect to temperature at at the initial conditions, so once the average rate of change of a small temperature range will be found, the thermal expansion coefficient described in Equation \ref{eq7} can be calculated.
+
+%-------------------------------------------------------------
+\section{Results}
+\subsection{RLC Calibration Results}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.42\linewidth]{figures/illustrations/Cal_curve.png}
+    \caption{From the y-intercept and dividing by the experimental value for $L$, which is the slope of the fit, it was found that $C_{parasitic} = 34.3 \pm 0.1 \text{pF}$. The standard error comes from the LCR meter's precision limit, since the standard deviation from the fit is minuscule. See Appendix \ref{reso_cali} for raw data.}
+    \label{fig:placeholder}
+\end{figure}
+
+
+\subsection{Thermocouple Calibration Results}
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figures/plots/thermo_cali_curve.png}
+    \caption{Plot of the cubic fit of temperature-voltage  points of AD 594/595 thermocouple chip.}
+    \label{thermocali}
+\end{figure}
+
+\subsection{Noise Measurement}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.0}
+\begin{tabular}{lcc}
+\toprule
+Metric (pF) & Without sample & With sample \\
+\midrule
+Noise SD, $\sigma_{\text{noise}}$ & 2.40 & 0.78 \\
+Mean, $\mu$                       & 152.8 & 95.86 \\
+SE                                & 0.20 & 0.06 \\
+\bottomrule
+\end{tabular}
+\caption{Summary of noise measurements.}
+\label{tab:noise_analysis}
+\end{table}
+
+
+
+\subsection{Observed changes in capacitance induced by thermal expansion}
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/plots/capacitance_vs_temp_good.png}
+    \caption{Measured changes in capacitance through expansion of materials induced by thermal changes, with and without the thiourea sample. The residuals can be found in Appendix  \ref{residuals}.}
+    \label{realgudplot}
+\end{figure}
+The recorded data for the capacitor containing the crystal sample extended down to \(-30^\circ\mathrm{C}\). However, as the obtained data for the reference capacitor without the sample were only in the \(\,25^\circ\mathrm{C}\) to \(-15^\circ\mathrm{C}\) range, the analysis of the capacitor with the sample was restricted to this same temperature range. This was done due to phase transitions and other temperature dependent effects that can significantly alter the observed data trends, thereby affecting the comparability of the results. For the complete temperature range for the capacitor with the crystal sample, see Appendix \ref{app:nonlinplot}.
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+     & Degrees of freedom & $p$-value & Reduced $ \chi^2$\\ \hline
+    Without Thiourea sample & 371 & 0.490 & 1.00\\
+    With Thiourea sample & 153 &  0.488    & 1.00 \\
+    \hline  
+    \end{tabular}
+
+\label{plotres}
+\caption{Resulting statistical quantities from capacitance against temperature relations along with their uncertainties, for setup with the sample and without the sample.}
+\end{table}
+
+\begin{table}[H]
+\centering
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+Experimental value & Literature value & Percentage error & $\sigma$ away \\ \hline
+ $ (13.6 \pm5.6) \times 10^{-5}\;  K^{-1}$ & $6.41 \times 10^{-5} \; K^{-1}$ & 112.6 \%  & 1.28 \\ \hline
+\end{tabular}
+\label{finresults}
+\caption{Final experimentally determined thermal expansion coefficient values for thiourea in comparison with standard literature \cite{thiourea}. }
+\end{table}
+
+\section{Discussion}
+
+\subsection{Remarks on Calibrations and Noise}
+
+The measured parasitic capacitance was consistent with the value expected for an RLC circuit assembled on a breadboard and characterized using the Moku:Go frequency analyzer. In addition, the slope of the linear fit, which corresponds to the inductance, was found to be $a = 10.8\text{mH}$. This differs by about $3\%$ from the inductance measured independently using the LCR meter, $L = 10.46\text{mH}$. While the expected value lies within eight standard errors of the slope parameter, since $\sigma_a$, a 3\% error is usually industry standard for inductors, and hence differences in value can be explained by differences in measurement methods between the LCR meter and Moku:Go frequency sweeps. 
+The uncertainty in the y-intercept was also found to be small. This may be attributed to the limited number of data points used in the fit, as only eight measurements were taken. Increasing the number of data points would likely produce greater data scatter and a more realistic estimate of the standard deviation of the fitted parameters.
+The noise plots provide the best estimate for the value of the capacitors at room temperature, namely $C_{\text{sample}} = 95.86 \pm 0.06\text{pF}$ and $C_{\text{baseline}} = 152.8 \pm 0.2\text{pF}$, and the respective noise standard deviations are $0.78\text{pF}$ and $2.4\text{pF}$. The capacitance values were used in calculations to determine the thermal expansion coefficient while the standard deviation justify that the total observed change of capacitance during actual runs, in the order of $30\text{pF}$, is not due to measurement noise but either to apparatus systematic error or actual physical phenomenon measurement.
+
+Since the measurements were done constantly at room temperature, the noise standard deviation shows the base variation in capacitance in this specific setup, and will allow to clearly identify changes in capacitance due to temperature changes by comparison. Note that the combined results represent the best estimate for the capacitance at room temperature. Data plots illustrating these quantities can be found in Appendix \ref{martinnoise}.
+
+The noise data also allowed to evaluate the initial separation of the plates, assuming they are parallel and that air is the only dielectric. This gives $D_0{_{\text{cap\ sample} }} = 461.8 \pm 0.3\ \mu m$ and $D_0{_{\text{cap\ no\ sample}}} = 289.6 \pm 0.3\ \mu m$.
+\subsection{Statistical soundness of results}
+The soundness of the extracted thermal expansion coefficient can be seen from the fits and noise perspective. $R^2$ values of 0.82 and 0.91 indicate a strong linear correlation between the quantities. Although there are many fluctuations and maybe even potential trends in the residuals, as explained these arose from the noise, from the limitations of the "Frankensteined"\footnote{See the README.md in \cite{github_link}} setup and physical limitations of the materials and instruments used. Although a reduced chi-squared was computed, its interpretation is limited in this experiment because the analysis is based primarily on instrument-reported temperature and capacitance values rather than repeated measurements with independently established pointwise uncertainties to fit a proposed model. Since the validity of a chi-squared goodness-of-fit test depends on an explicit model and reliable uncertainty estimates, we do not treat the resulting values as indicative in any manner. Matter of fact, the only way for us to compute a $\chi^2_{\nu}$ and $p-$value here was to set the estimated error bars to be the same as the residuals used in the linear fit. In doing that, the $\chi^2_{\nu}$ effectively yields to an illusion of a "perfect" value of 1, by construction of the goodness-of-fit test itself. \cite{textbook1}
+
+\subsection{Comments on the Phase Transitions Observed}
+
+In Appendix \ref{app:nonlinplot}, the non-linearized plots of the capacitance gradient as a function of temperature show several clearly distinguishable phase-transition-like features. A sharp increase in capacitance is observed between $0\degree \text{C}$ and $-10\degree \text{C}$ for both capacitors, with and without the sample, as well as an additional transition near $10\degree \text{C}$ for the capacitor without the sample.
+
+The most plausible explanation for the transition at negative temperatures in both capacitors is the presence of atmospheric water molecules freely circulating between the capacitor plates. As the temperature decreased below freezing, this moisture likely condensed and solidified into ice within the plate gap. This introduced a partial ice dielectric between the plates, whose dielectric constant, $\epsilon_i=95$, is substantially larger than that of air, $\epsilon_a=1$. Since capacitance is directly proportional to the dielectric constant, the formation of ice naturally explains the pronounced increase in capacitance.
+
+For the transition observed near $10\degree \text{C}$, a possible explanation is the secondary glass transition of PLA, the material used in the 3D-printed mount. A glass transition corresponds to a molecular reorganization of the solid into a glassy state that generally occupies a larger volume than the amorphous arrangement. As a result, the PLA may undergo slight expansion upon cooling through this transition region, reducing the separation between the capacitor plates and thereby increasing the capacitance. According to Maiza et al.\ \cite{Maiza2015}, PLA blended with additives such as TEC or ATBC can exhibit glass transitions as low as $10\degree \text{C} - 12\degree \text{C}$, which is consistent with the observed feature, especially since pure PLA is rarely used in 3D printing.
+
+The most important conclusion for these observations is that these observed transitions are unlikely to correspond to thiourea itself. Its highest-temperature phase transition occurs near $-77\degree \text{C}$ at room pressure \cite{Buescher2021}, which lies well below the reliable temperature range reached in this experiment.
+
+\subsection{Errors within Experimentation}
+
+A major source of error likely arose from imperfections in the capacitor geometry. Due to the uneven application of the epoxy adhesive, extensive manual handling of the apparatus, and the irregular physical shape of the thiourea sample, it is likely that the capacitor plates, which were intended to remain parallel, were slightly misaligned. This introduced both systematic and random errors that were difficult to quantify. Since the parallel-plate capacitor model described by Equation~\ref{eq1} assumes perfectly parallel plates with uniform separation, any deviation from these conditions invalidates the assumptions underlying the equation and makes the capacitance behavior difficult to model accurately. This was likely the most significant source of error, as the entire experiment depended on reliable capacitance measurements to determine the thermal expansion of the sample.
+
+Another significant source of error occurred at low temperatures, where contraction or deformation of the setup caused the capacitor plates to come into contact and short, disrupting data collection. As a temporary solution, pieces of paper were inserted at the edges between the plates to maintain separation. However, this introduced an additional dielectric material whose permittivity can vary significantly with moisture content. Because the setup was exposed to the vapors of liquid nitrogen, condensation and moisture absorption by the paper could have altered its dielectric properties, thereby introducing further systematic error into the capacitance measurements.
+
+The integrity of the sample was compromised after the capacitor with sample had to be disassembled due to a manipulation in construction error, meaning that data collection was not done with an intact sample, providing another explanation for why results may skew away from known values.
+
+\subsection{Possible Improvements}
+
+Since the largest errors in the experiment come from the setup, several improvements could be made to increase the reliability of the measurements.
+
+Firstly, the structure of the capacitor setup could be improved. A fixture could be designed to hold the setup in place while the epoxy cures. This would help prevent slight shifts during transport and preserve the parallel alignment of the plates. In addition, the material used for the 3D-printed support could be optimized. During the experiment, the dimensions of the PLA filament were assumed to change linearly with temperature. However, this assumption was not strictly correct and likely introduced additional systematic error. To reduce this effect, a material with better rigidity and stability at low temperatures, such as polyurethane, could be used.
+
+Secondly, using a solid dielectric would help avoid shorting issues as well as provide more control on the dielectric constant of the setup throughout the experiment. An example of a known and mechanically robust dielectric would be Kapton tape that could be stuck to one plate, hence limiting any risk of shorting. Then, isolating the gap as much as possible from the outside air limits the impact of ice forming between the plates, adding a noisy transition in the middle of the data. Furthermore, while air served as a suitable dielectric, its low permittivity resulted in only small capacitance changes, making the measurements highly susceptible to the noise of the setup. Using a material with a higher permittivity would increase the overall capacitance and amplify the measurable capacitance variation, reducing the relative impact of systematic noise.
+%-------------------------------------------------------------
+\section{Conclusion}
+
+Using the experimental setup and capacitance-based measurement method, the thermal expansion coefficient of thiourea was determined to be $(13.6 \pm 5.6)\times10^{-5}\; \mathrm{K^{-1}}$.
+This corresponds to a percentage error of approximately \(112.6\%\) relative to the literature value and $1.28\sigma$ away, so the objective to accurately measure $\alpha_{\text{thiourea}}$ was not quite achieved. The dominant uncertainties in this experiment were primarily systematic, arising from limitations associated with the custom-built capacitors. Phase transitions of the thiourea were also unobservable with the setup, yet phase transitions of water or PLA were observed, showing physical soundness of the data obtained.
+
+Despite these sources of error, the results demonstrate that capacitance measurements can serve as an effective method for detecting small thermal expansions. Beyond thiourea, this approach could be extended to other crystalline or dielectric materials for which direct dimensional measurements are challenging. With improved mechanical stability and more precise capacitor fabrication, this technique has the potential to provide a low-cost alternative to conventional dilatometry, particularly in cryogenic studies, sensor calibration, and the characterization of materials for electronic or photonic applications. Future investigations could refine this method to probe anisotropic thermal expansion and to study temperature-induced phase transitions in molecular crystals and other solids.
+%-------------------------------------------------------------
+
+\clearpage
+\section*{Author Contributions Statement}
+
+\noindent B.V.D. most significant areas of contributions, in decreasing order, were management of logistics, communication and personnel, experimental design and fabrication, report writing , data collection and interpretation. 
+
+\noindent E.H contributed to the experimental concept and methodology, exact physical design of the apparatus, and the construction of the experimental setup. Derived gorgeous necessary equations for the data analysis.
+
+
+
+\noindent C.L. contributed to the writing of the report, the construction and brainstorming of the experimental setup. 
+
+\noindent M.L. contributed to the experimental setup and executional laboratory undertakings, particularly RLC calibration, and writing the Python scripts for the MokuGo as well as noise analysis code and almost all data collection. Contributed to the lab report by writing part of the thermal expansion theory, parts of the methods, results and discussion sections.
+
+\noindent N.R. has contributed by performing data analysis, graphing, and error propagation, as well as contributing to data collection, background research, experimental setup configuration, and its troubleshooting, and minor contributions to every section of the lab report writing.
+
+\noindent ALL Authors contributed to proofreading the final report.
+%------------------------------------------------------------
+\clearpage
+\appendix
+
+\section{Derivation of Thermal Expansion Coefficient Equation}
+
+\[
+C=\frac{\varepsilon A}{D},\;\varepsilon =\varepsilon_0\varepsilon_r,\; \dot x=\frac{dx}{dT}
+\]
+
+ 
+\[
+\frac{dC}{dT}=\frac{A}{D}\frac{d\varepsilon}{dT}+\frac{\varepsilon}{D}\frac{dA}{dT}-\frac{\varepsilon A}{D^2}\frac{dD}{dT}
+\]
+\[
+D\dot C=A\dot \varepsilon+\varepsilon \dot A-\frac{\varepsilon A}{D}\dot D=A\dot \varepsilon+\varepsilon \dot A-C\dot D
+\]
+
+Let $C'$ be the capacitance for a capacitor with a sample substance attached to one of its plates, D' the distance between said plates, and $\Delta D = D' - D$. 
+
+\[
+D'\dot C'=A\dot \varepsilon+\varepsilon \dot A-\frac{\varepsilon A}{D'}\dot D'
+\]
+
+\[
+(D+\Delta D)\dot C'=A\dot \varepsilon+\varepsilon \dot A-\frac{\varepsilon A}{D+\Delta D}(\dot D+\Delta \dot D)=A\dot \varepsilon+\varepsilon \dot A-C'(\dot D+\Delta \dot D)
+\]
+\[
+(D+\Delta D)\dot C'=\dot CD+\dot D(C-C')+C'\Delta \dot D
+\]
+
+At room temperature:
+
+\[
+C=C',\;\frac{D}{D+\Delta D}=1
+\]
+
+\[
+\dot C'=\dot C+\frac{C'}{D'}\Delta \dot D
+\]
+\[
+\Delta \dot D=\frac{D_0'}{C_0'}(\dot C'-\dot C)
+\]
+
+Under temperature changes, the change in the length of a sample is proportional to its initial length via the thermal expansion coefficient, $\alpha$:
+
+\[
+L = L_0e^{\alpha(T-T_0)}
+\]
+Since alpha is so small, when we Taylor expand this, we drop higher order terms to find
+\[
+L = L_0 + L_0\alpha\Delta T
+\]
+\[\Delta L = L_0\alpha\Delta T\]
+\[
+dL=L_0\alpha dT
+\]
+\[
+\frac{dL}{dT}=\Delta \dot D=L_0\alpha
+\]
+\[
+\alpha =\frac{D_0}{L_0C_0}\left (\frac{dC'}{dT}-\frac{dC}{dT}\right)
+\]
+\label{derivation}
+
+\section{Data Table for Calibration}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{file} & \textbf{peak\_freq\_hz} & \textbf{C\_calculated\_pF} & \textbf{C\_known\_pF} & \textbf{error\_\%} \\ 
+\midrule
+rlc\_sweep\_10\_C102.1pF & 133000.0 & $1.369006 \times 10^{2}$ & 102.1 & 34.08 \\ 
+rlc\_sweep\_10\_C11.9pF  & 222000.0 & $4.913630 \times 10^{1}$ & 11.9 & 312.91 \\ 
+rlc\_sweep\_10\_C32.6pF  & 190000.0 & $6.708130 \times 10^{1}$ & 32.6 & 105.77 \\ 
+rlc\_sweep\_10\_C481pF   & 67400.0  & $5.330756 \times 10^{2}$ & 481.0 & 10.83 \\ 
+rlc\_sweep\_10\_C5.7pF   & 241000.0 & $4.169410 \times 10^{1}$ & 5.7 & 631.48 \\ 
+rlc\_sweep\_10\_C6.3pF   & 240000.0 & $4.204230 \times 10^{1}$ & 6.3 & 567.34 \\ 
+rlc\_sweep\_10\_C69.1nF  & 500.0    & $9.686538 \times 10^{6}$ & 69100.0 & 13918.14 \\ 
+rlc\_sweep\_10\_C8.2pF   & 231000.0 & $4.538210 \times 10^{1}$ & 8.2 & 453.44 \\ 
+rlc\_sweep\_10\_C8.5pF   & 230000.0 & $4.577760 \times 10^{1}$ & 8.5 & 438.56 \\ 
+\bottomrule
+\end{tabular}
+\caption{The measurement for the $69.1\ nF$ capacitor was left out of the calibration curve as it was considered an outlier value due to the high percent error. The values for the circuit other than the capacitors are $L=10.46\ mH$ and $R=1.1\ k\Omega$}
+\label{tab:rlc_data}
+\end{table}
+\label{reso_cali}
+
+
+
+
+\section{Noise Measurements Scatter Plots}
+
+\begin{figure}[htbp!]
+     \centering
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/plots/noise_scatter_nosample.png}
+         \caption{Noise data from one of the three runs for the capacitance at room temperature with the sample}
+         \label{fig:plot-a}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/plots/noise_scatter_sample.png}
+         \caption{Noise data from one of the three runs for the capacitance at room temperature without the sample}
+         \label{fig:plot-b}
+     \end{subfigure}
+     \caption{Note the few points around $10\ pF$ in the right plot: these were considered to be outliers since every other point was very consistently within $90\pm1\ pF$, including in the other two runs. Since they originally impacted a lot the standard deviation of the noise despite the rest of the data set being very precise, they were removed from final calculations as deemed not representative of the actual data.}
+     \label{fig:overall-comparison}
+\end{figure}
+\label{martinnoise}
+
+\section{Residuals for Capacitance against temperature}
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/plots/new_g2.png}
+    \caption{Residuals of the fitted relation between Capacitance and temperature and the actual recorded data points}
+    \label{fig:placeholder}
+\end{figure}
+\label{residuals}
+
+\section{Non-linearized Capacitance Change as a Function of Temperature}
+
+\begin{figure}[htbp!]
+     \centering
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/plots/raw_scatter_sample.png}
+         \caption{Non-linearized plot for sample capacitor}
+         \label{fig:plot-a}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{figures/plots/raw_scatter_nosample.png}
+         \caption{Non-linearized plot for no sample capacitor}
+         \label{fig:plot-b}
+     \end{subfigure}
+     \caption{The ranges chosen are justified through study of outliers. In particular, below $-30 \degree C$, the capacitance became erratic, typical behavior for a shorted capacitor.}
+     \label{fig:overall-comparison}
+\end{figure}
+
+\label{app:nonlinplot}
+\clearpage
+\bibliographystyle{plainurl}
+\bibliography{MyBibliography}
+
+\end{document}

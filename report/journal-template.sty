@@ -1,0 +1,108 @@
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[pagebackref]{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!95!black},
+    citecolor={blue!100!black},
+    urlcolor={violet!100!black}
+}
+\graphicspath{ {figures/} }
+\usepackage{setspace}
+\usepackage[font=singlespacing]{caption}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage[letterpaper, left=2.5cm, top=2.5cm, right=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{multirow}
+\usepackage[version=4]{mhchem} % to help typeset chemical molecular formula
+%\usepackage{subfig}  
+\usepackage[english]{babel}
+\usepackage{upgreek}
+\usepackage{authblk}
+\usepackage{wrapfig}
+\usepackage{sectsty}
+\usepackage{tgtermes}
+
+
+%------- additional font and document formatting  -----------
+%                  Do not change
+\renewcommand\thesection{\arabic{section}}
+\sectionfont{\fontsize{12}{15}\selectfont}
+\subsectionfont{\fontsize{12}{15}\selectfont}
+\subsubsectionfont{\fontsize{12}{15}\selectfont}
+\setstretch{1.15}
+%-------------------------------------------------------------
+
+%---------------------------------------------------
+% Redefinition of the titlepage environment
+%---------------------------------------------------
+\renewenvironment{titlepage}{%
+\clearpage%\thispagestyle{empty}
+%\setcounter{page}{0} % Comment out if you don't want to reset the page number
+}{}
+
+
+%---------------------------------------------------
+% Redefinition of the abstract environment
+%---------------------------------------------------
+\renewenvironment{abstract}{%
+\begin{center}%
+  \hrule
+   \vskip 0.5em
+   \bfseries \abstractname
+    \end{center}
+}%
+{\par\vskip 0.5em\hrule}
+
+%---------------------------------------------------
+% Redefinition of \maketitle command and style
+%---------------------------------------------------
+\makeatletter
+
+\renewcommand{\maketitle}{%
+    \begin{titlepage}
+    \begin{center}
+    \begin{picture}(50,50)
+    \put(-20,-20){\hbox{\includegraphics[scale=0.06]{figures/icons/McGill.png}}}
+    \end{picture}
+    \hfill
+    {\Huge{\it McGill Physics Journal}} 
+    \hfill
+    \begin{picture}(50,50) 
+    \put(10,-20){\hbox{\includegraphics[scale=0.24]{figures/icons/PhysicsLogo.pdf}}}
+    \end{picture}
+
+    \vspace{1cm} 
+    
+    {\Large\@title \par}%
+   
+%    \vskip 0.5em%
+
+    \vskip 1.em%
+
+    {\large 
+    \lineskip .75em%
+%      \begin{tabular}[t]{c}%
+        \@author
+%      \end{tabular}\par}%
+    \par}
+
+    \vskip 1.em%
+
+    {\large \@date \par}%       % Set date in \large size.
+
+    \vskip 1.em%
+
+    \end{center}
+%   \global\let\newpagegood\newpage
+%    \global\let\newpage\relax
+    \end{titlepage}
+
+}\makeatother
+
+%    \global\let\newpage\newpagegood
